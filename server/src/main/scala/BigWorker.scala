@@ -54,10 +54,10 @@ class BigWorker extends Actor with Work1 with Work2 with Work3 {
     //when all of the work is finished, send each work event & the finished event to event bus
     //TODO what if a work method throws an exception?
     for {
-      fs <- Future.sequence(List(f1, f2, f3))
+      events <- Future.sequence(List(f1, f2, f3))
       eventBus <- registry.actorFor[EventBus]
     } {
-      fs foreach { eventBus ! _ }
+      events foreach { eventBus ! _ }
       eventBus ! BigWorkFinished(workId)
       self.stop()
     }
