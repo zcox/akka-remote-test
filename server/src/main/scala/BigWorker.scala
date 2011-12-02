@@ -52,9 +52,8 @@ class BigWorker extends Actor with Work1 with Work2 with Work3 {
     val f3 = Future { Work3Event(workId, work3(workId)) }
     
     //when all of the work is finished, send each work event & the finished event to event bus
-    //TODO what if a work method throws an exception?
     for {
-      events <- Future.sequence(List(f1, f2, f3))
+      events <- Future.sequence(List(f1, f2, f3)).await.resultOrException
       eventBus <- registry.actorFor[EventBus]
     } {
       events foreach { eventBus ! _ }
