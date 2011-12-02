@@ -12,14 +12,17 @@ object Main {
     println("Starting remote on %s:%d".format(host, port))
     remote.start(host, port)
     
-    println("Getting service1 from %s:%d".format(serverHost, serverPort))
+    /*println("Getting service1 from %s:%d".format(serverHost, serverPort))
     val service1 = remote.actorFor("service1", serverHost, serverPort)
     val client1 = actorOf[Client1].start()
-    client1 ! service1
+    client1 ! service1*/
     
     /*val publisher = remote.actorFor("publisher", serverHost, serverPort)
     val subscriber = actorOf[Subscriber].start()
     subscriber ! publisher*/
+    
+    val commandBus = remote.actorFor("CommandBus", serverHost, serverPort)
+    commandBus ! DoBigWork("abcd-1234")
   }
 }
 
